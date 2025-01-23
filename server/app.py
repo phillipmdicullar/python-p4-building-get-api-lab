@@ -18,21 +18,28 @@ db.init_app(app)
 def index():
     return '<h1>Bakery GET API</h1>'
 
+
 @app.route('/bakeries')
 def bakeries():
-    return ''
-
+    # bakes =  [bakery.to_dict() for bakery in Bakery.query.all()]
+    # return make_response(bakes, 200)
+    bakes = [bakes.to_dict() for bakes in Bakery.query.all()]
+    return make_response(bakes, 200)
 @app.route('/bakeries/<int:id>')
 def bakery_by_id(id):
-    return ''
+    bakes = Bakery.query.filter(Bakery.id == id).first()
+    return make_response(bakes.to_dict(), 200)
 
 @app.route('/baked_goods/by_price')
 def baked_goods_by_price():
-    return ''
+    bakes = [bake.to_dict() for bake in BakedGood.query.order_by(BakedGood.price.desc()).all()]
+    return make_response(bakes, 200)
 
 @app.route('/baked_goods/most_expensive')
 def most_expensive_baked_good():
-    return ''
+    expensive = BakedGood.query.order_by(BakedGood.price.desc()).limit(1).first()
+    most_expensive_changer = expensive.to_dict()
+    return make_response( most_expensive_changer,   200  )
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
